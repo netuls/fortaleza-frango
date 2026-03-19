@@ -175,6 +175,26 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);min
 .ce-em{font-size:46px;opacity:0.3;margin-bottom:10px;}
 .ce-msg{font-size:14px;color:var(--dim);}
 
+/* TOAST */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a0800;border:1px solid var(--red2);color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;padding:11px 20px;border-radius:50px;z-index:999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(181,34,8,0.4);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* CLIENTE CARD */
+.cli-card{border:1px solid var(--b2);border-radius:14px;background:var(--s2);overflow:hidden;margin-bottom:4px;}
+.cli-card-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none;}
+.cli-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--red2),var(--red3));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.cli-info{flex:1;min-width:0;}
+.cli-name{font-size:14px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cli-sub{font-size:11px;color:var(--dim);margin-top:1px;}
+.cli-chev{font-size:12px;color:var(--dim);transition:transform .2s;flex-shrink:0;}
+.cli-card.expanded .cli-chev{transform:rotate(180deg);}
+.cli-fields{display:none;padding:0 16px 16px;}
+.cli-card.expanded .cli-fields{display:block;}
+.cli-actions{display:flex;gap:8px;margin-top:14px;}
+.btn-cli-save{flex:1;background:linear-gradient(135deg,var(--teal),#0d6b5f);color:#fff;border:none;border-radius:10px;padding:11px;font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;cursor:pointer;}
+.btn-cli-clear{background:var(--s3);color:var(--muted);border:1px solid var(--b2);border-radius:10px;padding:11px 14px;font-family:'Outfit',sans-serif;font-weight:600;font-size:13px;cursor:pointer;}
+.cli-saved-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(20,136,122,0.15);border:1px solid rgba(20,136,122,0.3);border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700;color:#2DD4BF;letter-spacing:0.5px;margin-left:6px;}
+
 /* KG MODAL */
 .kg-ov{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.78);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;backdrop-filter:blur(8px);}
 .kg-ov.open{opacity:1;pointer-events:all;}
@@ -202,6 +222,8 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);min
 </head>
 <body>
 
+<div id="toast" class="toast"></div>
+
 <div class="hero">
   <div class="hero-topbar"></div>
   <div class="hero-glow"></div>
@@ -222,7 +244,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);min
       <span class="sdot" id="sdot"></span>
       <span id="stxt">Verificando...</span>
     </div>
-    <div class="hero-info">Seg – Sáb &nbsp;·&nbsp; 7h às 18h &nbsp;·&nbsp; (85) 98592-8140</div>
+    <div class="hero-info">Seg – Sáb &nbsp;·&nbsp; 6h30 às 11h30 &nbsp;·&nbsp; (85) 98592-8140</div>
   </div>
 
 </div>
@@ -390,7 +412,7 @@ function renderMenu(cat) {
     + '</div><div class="pgrid">';
   for (var i = 0; i < d.items.length; i++) {
     var item = d.items[i];
-    h += '<div class="pcard ' + d.cls + '">'
+    h += '<div class="pcard ' + d.cls + '" onclick="openKg(\'' + cat + '\',' + i + ')">'
       + '<div class="pcard-img">'
       + (item.img ? '<img src="' + item.img + '" alt="' + item.name + '" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.95) contrast(1.15) saturate(1.15) sepia(0.05);">' : '<div class="pcard-em">' + item.emoji + '</div>')
       + '<div class="pcard-shine"></div><span class="pcard-pip"></span></div>'
@@ -399,7 +421,7 @@ function renderMenu(cat) {
       + '<div class="pcard-desc">' + item.desc + '</div>'
       + '<div class="pcard-foot">'
       + '<div><div class="pcard-price">R$ ' + fK(item.priceKg) + '</div><div class="pcard-unit">por kg</div></div>'
-      + '<button class="pcard-add" onclick="openKg(\'' + cat + '\',' + i + ')">+</button>'
+      + '<button class="pcard-add" onclick="event.stopPropagation();openKg(\'' + cat + '\',' + i + ')">+</button>'
       + '</div></div></div>';
   }
   h += '</div>';
@@ -559,59 +581,140 @@ function renderCart() {
     + '<div class="do' + (selEnt === 'entrega' ? ' sel' : '') + '" data-tipo="entrega"  onclick="togEnt(this)"><div class="di">🛵</div><div class="dl">Entrega</div></div>'
     + '</div>';
 
-  h += '<div class="aw' + (selEnt === 'entrega' ? ' show' : '') + '" id="aw">'
-    + '<label class="fl">CEP *</label><input class="fi" id="ecep" type="tel" placeholder="60000-000" maxlength="9">'
-    + '<label class="fl">Rua *</label><input class="fi" id="erua" type="text" placeholder="Ex: Rua das Flores">'
-    + '<div class="r2">'
-    + '<div><label class="fl">Número *</label><input class="fi" id="enum" type="text" placeholder="123"></div>'
-    + '<div><label class="fl">Complemento</label><input class="fi" id="ecomp" type="text" placeholder="Apto 2"></div>'
-    + '</div>'
-    + '<label class="fl">Bairro *</label><input class="fi" id="ebai" type="text" placeholder="Ex: Centro"></div>';
+  // ── DADOS DO CLIENTE ──
+  var cli = carregarCliente();
+  var temCli = cli && cli.nome;
+  var cliCep  = temCli && cli.cep   ? cli.cep   : '';
+  var cliRua  = temCli && cli.rua   ? cli.rua   : '';
+  var cliNum  = temCli && cli.num   ? cli.num   : '';
+  var cliComp = temCli && cli.comp  ? cli.comp  : '';
+  var cliBai  = temCli && cli.bai   ? cli.bai   : '';
 
-  h += '<div class="slbl">Seus dados</div>'
-    + '<label class="fl">Nome *</label><input class="fi" id="nome" type="text" placeholder="Ex: João Silva">'
-    + '<label class="fl">WhatsApp *</label><input class="fi" id="wpp" type="tel" placeholder="85999998888" maxlength="15">'
-    + '<label class="fl">Observações</label><input class="fi" id="obs" type="text" placeholder="Embalagem separada...">'
-    + '<button class="btn-fin" onclick="finalizar()">🐔 Finalizar pedido via WhatsApp</button>';
+  // card do cliente logo abaixo de entrega/retirada
+  h += '<div class="slbl">Seus dados</div>';
+  h += '<div class="cli-card" id="cli-card">';
+  h += '<div class="cli-card-head" onclick="toggleCliCard()">';
+  h += '<div class="cli-avatar">👤</div>';
+  h += '<div class="cli-info">';
+  if (temCli) {
+    h += '<div class="cli-name">' + cli.nome + ' <span class="cli-saved-badge">✓ Salvo</span></div>';
+    var endResumo = cliRua ? (cliRua + (cliNum ? ', ' + cliNum : '') + ' · ') : '';
+    h += '<div class="cli-sub">' + endResumo + cli.wpp + ' · toque para editar</div>';
+  } else {
+    h += '<div class="cli-name">Novo cliente</div>';
+    h += '<div class="cli-sub">Preencha seus dados para agilizar futuros pedidos</div>';
+  }
+  h += '</div><div class="cli-chev">▼</div></div>';
+  h += '<div class="cli-fields">';
+  h += '<label class="fl">Nome *</label><input class="fi" id="nome" type="text" placeholder="Ex: João Silva" value="' + (temCli ? cli.nome : '') + '">';
+  h += '<label class="fl">WhatsApp *</label><input class="fi" id="wpp" type="tel" placeholder="85999998888" maxlength="15" value="' + (temCli ? cli.wpp : '') + '">';
+  h += '<div class="slbl" style="margin-top:14px;">Endereço padrão</div>';
+  h += '<label class="fl">CEP</label><input class="fi" id="cli-cep" type="tel" placeholder="60000-000" maxlength="9" value="' + cliCep + '">';
+  h += '<label class="fl">Rua</label><input class="fi" id="cli-rua" type="text" placeholder="Ex: Rua das Flores" value="' + cliRua + '">';
+  h += '<div class="r2">';
+  h += '<div><label class="fl">Número</label><input class="fi" id="cli-num" type="text" placeholder="123" value="' + cliNum + '"></div>';
+  h += '<div><label class="fl">Complemento</label><input class="fi" id="cli-comp" type="text" placeholder="Apto 2" value="' + cliComp + '"></div>';
+  h += '</div>';
+  h += '<label class="fl">Bairro</label><input class="fi" id="cli-bai" type="text" placeholder="Ex: Centro" value="' + cliBai + '">';
+  h += '<div class="cli-actions">';
+  h += '<button class="btn-cli-save" onclick="salvarCliente()">💾 Salvar dados</button>';
+  if (temCli) h += '<button class="btn-cli-clear" onclick="confirmarLimpar(this)">🗑 Limpar</button>';
+  h += '</div></div></div>';
+
+  // campos de endereço de entrega
+  h += '<div class="aw' + (selEnt === 'entrega' ? ' show' : '') + '" id="aw">'
+    + '<label class="fl">CEP *</label><input class="fi" id="ecep" type="tel" placeholder="60000-000" maxlength="9" value="' + cliCep + '">'
+    + '<label class="fl">Rua *</label><input class="fi" id="erua" type="text" placeholder="Ex: Rua das Flores" value="' + cliRua + '">'
+    + '<div class="r2">'
+    + '<div><label class="fl">Número *</label><input class="fi" id="enum" type="text" placeholder="123" value="' + cliNum + '"></div>'
+    + '<div><label class="fl">Complemento</label><input class="fi" id="ecomp" type="text" placeholder="Apto 2" value="' + cliComp + '"></div>'
+    + '</div>'
+    + '<label class="fl">Bairro *</label><input class="fi" id="ebai" type="text" placeholder="Ex: Centro" value="' + cliBai + '"></div>';
+
+  h += '<label class="fl">Observações</label><input class="fi" id="obs" type="text" placeholder="Embalagem separada...">';
+  h += '<button class="btn-fin" onclick="finalizar()">🐔 Finalizar pedido via WhatsApp</button>';
 
   sc.innerHTML = h;
+
+  // novo cliente: expande o card direto
+  if (!temCli) {
+    var c = document.getElementById('cli-card');
+    if (c) c.classList.add('expanded');
+  }
+}
+
+// ── TOAST ──
+var _toastTimer = null;
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2800);
 }
 
 // ── FINALIZAR ──
 function finalizar() {
-  var nome  = (document.getElementById('nome')?.value  || '').trim();
-  var wpp   = (document.getElementById('wpp')?.value   || '').trim();
+  var cli = carregarCliente();
+  var nome  = (document.getElementById('nome')?.value  || (cli && cli.nome) || '').trim();
+  var wpp   = (document.getElementById('wpp')?.value   || (cli && cli.wpp)  || '').trim();
   var obs   = (document.getElementById('obs')?.value   || '').trim();
   var troco = (document.getElementById('troco')?.value || '').trim();
-  var rua   = (document.getElementById('erua')?.value  || '').trim();
-  var num   = (document.getElementById('enum')?.value  || '').trim();
-  var comp  = (document.getElementById('ecomp')?.value || '').trim();
-  var bai   = (document.getElementById('ebai')?.value  || '').trim();
-  var cep   = (document.getElementById('ecep')?.value  || '').trim();
+  var rua   = (document.getElementById('erua')?.value  || (cli && cli.rua)  || '').trim();
+  var num   = (document.getElementById('enum')?.value  || (cli && cli.num)  || '').trim();
+  var comp  = (document.getElementById('ecomp')?.value || (cli && cli.comp) || '').trim();
+  var bai   = (document.getElementById('ebai')?.value  || (cli && cli.bai)  || '').trim();
+  var cep   = (document.getElementById('ecep')?.value  || (cli && cli.cep)  || '').trim();
 
-  if (!selEnt)                            { alert('Selecione Retirada ou Entrega!'); return; }
-  if (selEnt === 'entrega' && !rua)       { alert('Informe a rua!'); return; }
-  if (selEnt === 'entrega' && !num)       { alert('Informe o número!'); return; }
-  if (selEnt === 'entrega' && !bai)       { alert('Informe o bairro!'); return; }
-  if (selEnt === 'entrega' && !cep)       { alert('Informe o CEP!'); return; }
-  if (!nome)                              { alert('Informe seu nome!'); return; }
-  if (!wpp)                               { alert('Informe seu WhatsApp!'); return; }
-  if (selPay.length === 0)               { alert('Selecione uma forma de pagamento!'); return; }
+  if (!selEnt)                            { showToast('⚠️ Selecione Retirada ou Entrega!'); return; }
+  if (selEnt === 'entrega' && !rua)       { showToast('⚠️ Informe a rua!'); return; }
+  if (selEnt === 'entrega' && !num)       { showToast('⚠️ Informe o número!'); return; }
+  if (selEnt === 'entrega' && !bai)       { showToast('⚠️ Informe o bairro!'); return; }
+  if (selEnt === 'entrega' && !cep)       { showToast('⚠️ Informe o CEP!'); return; }
+  if (!nome)                              { showToast('⚠️ Informe seu nome!'); return; }
+  if (!wpp)                               { showToast('⚠️ Informe seu WhatsApp!'); return; }
+  if (selPay.length === 0)                { showToast('⚠️ Selecione uma forma de pagamento!'); return; }
 
   var lbl = { pix: 'PIX', dinheiro: 'Dinheiro', credito: 'Cartão de Crédito', debito: 'Cartão de Débito' };
   var payStr = selPay.map(function(p) { return lbl[p]; }).join(' + ');
 
-  var msg = '*NOVO PEDIDO — FORTALEZA FRANGO* 🐔\n\n';
-  msg += '*Tipo:* ' + (selEnt === 'entrega' ? 'Entrega 🛵' : 'Retirada na loja 🏪') + '\n';
+  var agora = new Date();
+  var dataHora = agora.toLocaleDateString('pt-BR') + ' - ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  var separador = '--------------------------------';
+
+  var msg = '*PEDIDO RECEBIDO — FORTALEZA FRANGO*\n';
+  msg += separador + '\n';
+  msg += '*Data:* ' + dataHora + '\n';
+  msg += separador + '\n\n';
+
+  msg += '*CLIENTE*\n';
+  msg += 'Nome: ' + nome + '\n';
+  msg += 'Contato: ' + wpp + '\n\n';
+
+  msg += '*MODALIDADE*\n';
+  msg += (selEnt === 'entrega' ? 'Entrega em domicilio' : 'Retirada no estabelecimento') + '\n';
   if (selEnt === 'entrega') {
-    msg += '*Endereço:* ' + rua + ', ' + num + (comp ? ' - ' + comp : '') + '\n';
-    msg += '*Bairro:* ' + bai + '\n*CEP:* ' + cep + '\n';
+    msg += 'Endereco: ' + rua + ', ' + num + (comp ? ' - ' + comp : '') + '\n';
+    msg += 'Bairro: ' + bai + '\n';
+    msg += 'CEP: ' + cep + '\n';
   }
-  msg += '*Cliente:* ' + nome + '\n*Contato:* +55' + wpp + '\n\n*ITENS:*\n';
-  cart.forEach(function(i) { msg += '- ' + i.name + ' (' + i.label + ') → ' + fP(i.price) + '\n'; });
-  msg += '\n*Total:* ' + fP(getTotal()) + '\n*Pagamento:* ' + payStr;
-  if (selPay.includes('dinheiro') && troco) msg += '\n*Troco para:* R$ ' + parseFloat(troco).toFixed(2).replace('.', ',');
-  if (obs) msg += '\n*Obs:* ' + obs;
+  msg += '\n';
+
+  msg += '*ITENS DO PEDIDO*\n';
+  cart.forEach(function(i, idx) {
+    msg += (idx + 1) + '. ' + i.name + ' — ' + i.label + ' — ' + fP(i.price) + '\n';
+  });
+  msg += '\n';
+
+  msg += separador + '\n';
+  msg += '*TOTAL: ' + fP(getTotal()) + '*\n';
+  msg += separador + '\n\n';
+
+  msg += '*PAGAMENTO*\n';
+  msg += payStr + '\n';
+  if (selPay.includes('dinheiro') && troco) msg += 'Troco para: R$ ' + parseFloat(troco).toFixed(2).replace('.', ',') + '\n';
+  if (obs) msg += '\n*OBSERVACOES*\n' + obs + '\n';
 
   var pedido = {
     nome: nome, whatsapp: wpp,
@@ -639,10 +742,60 @@ function finalizar() {
     + '<button class="btn-back" onclick="closeCart()">← Voltar ao cardápio</button></div>';
 }
 
+// ── CLIENTE ──
+function carregarCliente() {
+  try { return JSON.parse(localStorage.getItem('ff_cliente') || 'null'); } catch(e) { return null; }
+}
+function salvarCliente() {
+  var nome = (document.getElementById('nome')?.value    || '').trim();
+  var wpp  = (document.getElementById('wpp')?.value     || '').trim();
+  var cep  = (document.getElementById('cli-cep')?.value || '').trim();
+  var rua  = (document.getElementById('cli-rua')?.value || '').trim();
+  var num  = (document.getElementById('cli-num')?.value || '').trim();
+  var comp = (document.getElementById('cli-comp')?.value|| '').trim();
+  var bai  = (document.getElementById('cli-bai')?.value || '').trim();
+  if (!nome) { showToast('⚠️ Informe o nome!'); return; }
+  if (!wpp)  { showToast('⚠️ Informe o WhatsApp!'); return; }
+  localStorage.setItem('ff_cliente', JSON.stringify({ nome: nome, wpp: wpp, cep: cep, rua: rua, num: num, comp: comp, bai: bai }));
+  renderCart();
+  var c = document.getElementById('cli-card');
+  if (c) c.classList.remove('expanded');
+}
+function confirmarLimpar(btn) {
+  if (btn.dataset.conf === '1') {
+    limparCliente();
+  } else {
+    btn.dataset.conf = '1';
+    btn.textContent = '⚠️ Confirmar?';
+    btn.style.background = 'rgba(181,34,8,0.18)';
+    btn.style.borderColor = 'var(--red2)';
+    btn.style.color = 'var(--red2)';
+    setTimeout(function() {
+      if (btn.dataset.conf === '1') {
+        btn.dataset.conf = '0';
+        btn.textContent = '🗑 Limpar';
+        btn.style.background = '';
+        btn.style.borderColor = '';
+        btn.style.color = '';
+      }
+    }, 3000);
+  }
+}
+function limparCliente() {
+  localStorage.removeItem('ff_cliente');
+  renderCart();
+  var c = document.getElementById('cli-card');
+  if (c) c.classList.add('expanded');
+}
+function toggleCliCard() {
+  var c = document.getElementById('cli-card');
+  if (c) c.classList.toggle('expanded');
+}
+
 // ── STATUS ──
 function atualizarStatus() {
   var a = new Date(), h = a.getHours(), t = h * 60 + a.getMinutes(), d = a.getDay();
-  var ok = d >= 1 && d <= 6 && t >= 420 && t < 1080;
+  var ok = d >= 1 && d <= 6 && t >= 390 && t < 690;
   var pill = document.getElementById('spill'), dot = document.getElementById('sdot'), txt = document.getElementById('stxt');
   if (!pill) return;
   if (ok) {
