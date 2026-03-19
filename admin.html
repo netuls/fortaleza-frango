@@ -430,16 +430,12 @@ function onDateChange(){
   var input = document.getElementById('date-filter');
   if(input.value){
     input.classList.add('active');
-    // Remove "hoje" / "todos" e usa data do input
-    // mantém o filtro de status se não for hoje/todos
-    if(filtroAtual === 'hoje' || filtroAtual === 'todos'){
-      // não muda filtroAtual, a data vai sobrepor
-    }
     atualizarBadgeData();
   } else {
     input.classList.remove('active');
     document.getElementById('date-active-badge').classList.remove('visible');
   }
+  atualizarStats();
   renderPedidos();
 }
 
@@ -449,6 +445,7 @@ function limparData(){
   input.value = '';
   input.classList.remove('active');
   document.getElementById('date-active-badge').classList.remove('visible');
+  atualizarStats();
   renderPedidos();
 }
 
@@ -503,17 +500,30 @@ function carregarPedidos(){
     });
 }
 
-// ── STATS ── (sempre baseado em hoje, independente do filtro)
+// ── STATS ── respeita a data selecionada no input
 function atualizarStats(){
-  var hoje = new Date().toLocaleDateString('pt-BR');
-  var pedidosHoje = todosOsPedidos.filter(function(p){
-    return p.data === hoje && p.status !== 'Cancelado';
-  });
-  var totalHoje = pedidosHoje.reduce(function(s,p){ return s+p.total; },0);
-  var ticket = pedidosHoje.length > 0 ? totalHoje / pedidosHoje.length : 0;
+  var dateInput = document.getElementById('date-filter').value;
+  var dataBR = dateInput ? isoParaBR(dateInput) : new Date().toLocaleDateString('pt-BR');
 
-  document.getElementById('stat-total').textContent   = fmtR(totalHoje);
-  document.getElementById('stat-pedidos').textContent = pedidosHoje.length;
+  var pedidosDia = todosOsPedidos.filter(function(p){
+    return p.data === dataBR && p.status !== 'Cancelado';
+  });
+  var totalDia = pedidosDia.reduce(function(s,p){ return s+p.total; },0);
+  var ticket   = pedidosDia.length > 0 ? totalDia / pedidosDia.length : 0;
+
+  // Atualiza label do card dinamicamente
+  var hoje = new Date().toLocaleDateString('pt-BR');
+  var label = (dataBR === hoje) ? 'Faturamento Hoje' : 'Faturamento '+dataBR;
+  var labelPedidos = (dataBR === hoje) ? 'Pedidos Hoje' : 'Pedidos '+dataBR;
+  document.querySelector('[for-stat="total"]')   && (document.querySelector('[for-stat="total"]').textContent   = label);
+  document.querySelector('[for-stat="pedidos"]') && (document.querySelector('[for-stat="pedidos"]').textContent = labelPedidos);
+  // labels direto pelo índice (mais simples)
+  var labels = document.querySelectorAll('.stat-label');
+  if(labels[0]) labels[0].textContent = label;
+  if(labels[1]) labels[1].textContent = labelPedidos;
+
+  document.getElementById('stat-total').textContent   = fmtR(totalDia);
+  document.getElementById('stat-pedidos').textContent = pedidosDia.length;
   document.getElementById('stat-ticket').textContent  = fmtR(ticket);
 }
 
