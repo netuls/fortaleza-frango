@@ -72,8 +72,8 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);min
 .pcard{background:var(--s2);border:1px solid var(--b1);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .28s cubic-bezier(.34,1.56,.64,1),border-color .2s,box-shadow .2s;position:relative;}
 .pcard:hover{transform:translateY(-5px) scale(1.015);border-color:var(--b2);box-shadow:0 20px 40px rgba(0,0,0,0.55);}
 .pcard:active{transform:scale(0.97);}
-.pcard-img{width:100%;aspect-ratio:1/1;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;}
-.pcard-em{font-size:52px;transition:transform .4s cubic-bezier(.34,1.2,.64,1);position:relative;z-index:1;}
+.pcard-img{width:100%;aspect-ratio:4/3;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;}
+.pcard-em{font-size:38px;transition:transform .4s cubic-bezier(.34,1.2,.64,1);position:relative;z-index:1;}
 .pcard:hover .pcard-em{transform:scale(1.13);}
 .pcard-shine{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(0,0,0,0.2));pointer-events:none;}
 .pcard-pip{position:absolute;top:10px;left:10px;width:6px;height:6px;border-radius:50%;box-shadow:0 0 8px currentColor;}
@@ -392,7 +392,7 @@ function renderMenu(cat) {
     var item = d.items[i];
     h += '<div class="pcard ' + d.cls + '">'
       + '<div class="pcard-img">'
-      + (item.img ? '<img src="' + item.img + '" alt="' + item.name + '" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.95) contrast(1.15) saturate(1.15) sepia(0.05);">' : '<div class="pcard-em">' + item.emoji + '</div>')
+      + (item.img ? '<img src="' + item.img + '" alt="' + item.name + '" style="width:100%;height:100%;object-fit:cover;object-position:center center;display:block;filter:brightness(0.95) contrast(1.15) saturate(1.15) sepia(0.05);">' : '<div class="pcard-em">' + item.emoji + '</div>')
       + '<div class="pcard-shine"></div><span class="pcard-pip"></span></div>'
       + '<div class="pcard-body">'
       + '<div class="pcard-name">' + item.name + '</div>'
