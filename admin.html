@@ -240,6 +240,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .confirm-btn{flex:1;border:none;border-radius:50px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;}
 .confirm-btn-nao{background:var(--surface2);color:var(--text2);border:1px solid var(--border2);}
 .confirm-btn-sim{background:var(--red);color:#fff;}
+
+/* REGRAS MODAL */
+.regras-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(6px);}
+.regras-overlay.open{opacity:1;pointer-events:all;}
+.regras-box{background:var(--surface);border:1.5px solid rgba(245,166,35,0.3);border-radius:22px;padding:28px 22px;width:100%;max-width:420px;transform:scale(0.93);transition:transform .2s;max-height:90vh;overflow-y:auto;}
+.regras-overlay.open .regras-box{transform:scale(1);}
+.regras-titulo{font-size:17px;font-weight:800;color:var(--gold);margin-bottom:6px;}
+.regras-sub{font-size:13px;color:var(--text3);line-height:1.6;margin-bottom:18px;}
+.regras-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:18px;}
+.regras-step{display:flex;gap:10px;align-items:flex-start;}
+.regras-num{width:22px;height:22px;border-radius:50%;background:var(--gold);color:#120500;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.regras-step-text{font-size:13px;color:var(--text2);line-height:1.5;}
+.regras-step-text strong{color:var(--text);}
+.regras-code{background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;font-family:monospace;font-size:11px;color:var(--gold);line-height:1.7;overflow-x:auto;white-space:pre;margin-bottom:14px;}
+.regras-copy-btn{width:100%;border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);margin-bottom:14px;transition:all .15s;}
+.regras-copy-btn:hover{border-color:var(--gold);color:var(--gold);}
+.regras-fechar{width:100%;background:linear-gradient(135deg,var(--accent),#c0200a);color:#fff;border:none;border-radius:50px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -367,6 +384,44 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
+<!-- MODAL REGRAS FIREBASE -->
+<div class="regras-overlay" id="regras-overlay">
+  <div class="regras-box">
+    <div class="regras-titulo">⚠️ Permissão negada no Firebase</div>
+    <div class="regras-sub">
+      A coleção <strong style="color:var(--gold)">configuracoes</strong> ainda não está liberada nas regras do Firestore.
+      Siga os passos abaixo para corrigir em menos de 1 minuto:
+    </div>
+    <div class="regras-steps">
+      <div class="regras-step">
+        <div class="regras-num">1</div>
+        <div class="regras-step-text">Acesse <strong>console.firebase.google.com</strong> e abra o projeto <strong>admin-restaurante-ebc77</strong></div>
+      </div>
+      <div class="regras-step">
+        <div class="regras-num">2</div>
+        <div class="regras-step-text">No menu lateral, clique em <strong>Firestore Database → Regras</strong></div>
+      </div>
+      <div class="regras-step">
+        <div class="regras-num">3</div>
+        <div class="regras-step-text">Substitua todo o conteúdo pelo código abaixo e clique em <strong>Publicar</strong></div>
+      </div>
+    </div>
+    <div class="regras-code" id="regras-code">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /pedidos/{id} {
+      allow read, write: if true;
+    }
+    match /configuracoes/{id} {
+      allow read, write: if true;
+    }
+  }
+}</div>
+    <button class="regras-copy-btn" onclick="copiarRegras()">📋 Copiar código das regras</button>
+    <button class="regras-fechar" onclick="fecharModalRegras()">Entendido, vou corrigir</button>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.0/firebase-app-compat.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.0/firebase-firestore-compat.min.js"></script>
 <script>
@@ -474,24 +529,50 @@ function aplicarStatusLoja(aberta){
 
 function alternarStatusLoja(){
   if(!db){ alert('Firebase não conectado.'); return; }
-  var toggle  = document.getElementById('loja-toggle');
+  var toggle     = document.getElementById('loja-toggle');
   var novoStatus = toggle.checked;
-  var saving  = document.getElementById('toggle-saving');
+  var saving     = document.getElementById('toggle-saving');
 
+  // Bloqueia o toggle enquanto salva
+  toggle.disabled = true;
   saving.textContent = 'Salvando...';
+  saving.style.color = 'var(--text3)';
 
-  db.collection('configuracoes').doc('loja').set({ aberta: novoStatus }, { merge: true })
+  db.collection('configuracoes').doc('loja').set({ aberta: novoStatus })
     .then(function(){
+      toggle.disabled = false;
       aplicarStatusLoja(novoStatus);
-      saving.textContent = novoStatus ? '✓ Salvo — Aberta' : '✓ Salvo — Fechada';
+      saving.style.color = 'var(--green)';
+      saving.textContent = novoStatus ? '✓ Aberta' : '✓ Fechada';
       setTimeout(function(){ saving.textContent = ''; }, 2500);
     })
     .catch(function(err){
-      saving.textContent = 'Erro ao salvar';
-      toggle.checked = !novoStatus; // reverte
+      toggle.disabled = false;
+      toggle.checked = !novoStatus; // reverte visual
       aplicarStatusLoja(!novoStatus);
-      setTimeout(function(){ saving.textContent = ''; }, 3000);
+
+      // Detecta se é erro de permissão do Firestore
+      var isPermission = err.code === 'permission-denied' ||
+                         (err.message && err.message.toLowerCase().includes('permission'));
+
+      saving.style.color = 'var(--red)';
+      saving.textContent = isPermission ? '⚠️ Permissão negada' : '⚠️ Erro';
+      setTimeout(function(){ saving.textContent = ''; }, 5000);
+
+      if(isPermission){
+        abrirModalRegras();
+      } else {
+        alert('Erro ao salvar: ' + err.message);
+      }
     });
+}
+
+// ── MODAL DE REGRAS DO FIRESTORE ──
+function abrirModalRegras(){
+  document.getElementById('regras-overlay').classList.add('open');
+}
+function fecharModalRegras(){
+  document.getElementById('regras-overlay').classList.remove('open');
 }
 
 // ── PEDIDOS ──
@@ -681,6 +762,21 @@ function confirmarCancelamento(){
 }
 
 function fmtR(v){ return 'R$ '+(v||0).toFixed(2).replace('.',','); }
+
+function copiarRegras(){
+  var codigo = document.getElementById('regras-code').textContent;
+  navigator.clipboard.writeText(codigo).then(function(){
+    var btn = document.querySelector('.regras-copy-btn');
+    btn.textContent = '✓ Copiado!';
+    btn.style.color = 'var(--green)';
+    btn.style.borderColor = 'var(--green)';
+    setTimeout(function(){
+      btn.textContent = '📋 Copiar código das regras';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 2500);
+  });
+}
 
 setInterval(function(){
   if(db && document.getElementById('admin-wrap').style.display!=='none') carregarPedidos();
