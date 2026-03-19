@@ -191,6 +191,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="header">
     <div class="header-logo">🐔 <span>FRANGO</span> ADMIN</div>
     <div class="header-right">
+      <button class="logout-btn" onclick="carregarPedidos()" style="border-color:rgba(245,166,35,0.4);color:var(--gold);" id="btn-atualizar">↻ Atualizar</button>
       <button class="logout-btn" onclick="fazerLogout()">Sair</button>
     </div>
   </div>
@@ -382,7 +383,8 @@ function iniciarFirebase(){
 // ── PEDIDOS ──
 function carregarPedidos(){
   if(!db) return;
-  document.getElementById('orders-wrap').innerHTML = '<div class="loading">Atualizando pedidos...</div>';
+  var btn = document.getElementById('btn-atualizar');
+  if(btn){ btn.textContent = '↻ ...'; btn.disabled = true; }
   db.collection('pedidos').orderBy('timestamp','desc').limit(200).get()
     .then(function(snap){
       todosOsPedidos = [];
@@ -392,10 +394,12 @@ function carregarPedidos(){
       });
       atualizarStats();
       renderPedidos();
+      if(btn){ btn.textContent = '↻ Atualizar'; btn.disabled = false; }
     })
     .catch(function(err){
       document.getElementById('orders-wrap').innerHTML =
         '<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Erro: '+err.message+'</div></div>';
+      if(btn){ btn.textContent = '↻ Atualizar'; btn.disabled = false; }
     });
 }
 
@@ -599,21 +603,36 @@ function buildCard(p){
   if(p.itens&&p.itens.length){ p.itens.forEach(function(i){ itensHtml += '<div class="item-row"><span class="item-row-name">'+i.nome+(i.extra?' ('+i.extra+')':'')+'</span><span class="item-row-price">'+fmtR(i.preco)+'</span></div>'; }); }
   var endHtml = '';
   if(p.tipo==='Entrega'){ endHtml = '<div class="detail-section"><div class="detail-title">Endereço de entrega</div><div class="address-block">'+p.endereco+'<br>'+p.bairro+' — CEP: '+p.cep+'</div></div>'; }
+
+  // botões progressivos por status
+  var acoes = '';
+  if(p.status === 'Cancelado'){
+    acoes = '<div style="padding:10px 0;text-align:center;font-size:13px;color:var(--red);font-weight:700;">PEDIDO CANCELADO</div>';
+  } else if(p.status === 'Entregue'){
+    acoes = '<div style="padding:10px 0;text-align:center;font-size:13px;color:var(--green);font-weight:700;">✓ ENTREGUE</div>';
+  } else {
+    var btns = '';
+    // Aceitar: só aparece se status for Novo
+    if(p.status === 'Novo'){
+      btns += '<button class="status-btn btn-confirmar" onclick="mudarStatus(event,this,\''+p._id+'\',\'Confirmado\',\''+p.whatsapp+'\',\''+p.nome+'\')">Aceitar</button>';
+    }
+    // Saiu: aparece se Novo ou Confirmado
+    if(p.status === 'Novo' || p.status === 'Confirmado'){
+      btns += '<button class="status-btn btn-rota" onclick="mudarStatus(event,this,\''+p._id+'\',\'Em Rota\',\''+p.whatsapp+'\',\''+p.nome+'\')">Saiu</button>';
+    }
+    // Entregue: sempre disponível até ser entregue
+    btns += '<button class="status-btn btn-entregar" onclick="mudarStatus(event,this,\''+p._id+'\',\'Entregue\',\''+p.whatsapp+'\',\''+p.nome+'\')">Entregue</button>';
+    // WhatsApp e Cancelar: sempre disponíveis
+    btns += '<button class="status-btn btn-wpp" onclick="abrirWpp(event,\''+p.whatsapp+'\',\''+p.nome+'\')">WhatsApp</button>';
+    btns += '<button class="status-btn btn-cancelar" onclick="pedirConfirmacao(event,this,\''+p._id+'\',\''+p.whatsapp+'\',\''+p.nome+'\')">Cancelar</button>';
+    acoes = '<div class="status-actions">'+btns+'</div>';
+  }
+
   return '<div class="order-card" id="card-'+p._id+'" onclick="toggleCard(\''+p._id+'\')">'
     +'<div class="order-top"><div><div class="order-name">'+p.nome+'</div><div class="order-wpp">'+(p.whatsapp||'')+' &bull; '+p.data+' '+p.hora+'</div></div><span class="order-badge '+badgeClass+'">'+p.status+'</span></div>'
     +'<div class="order-meta"><div class="meta-item">Tipo: <strong>'+p.tipo+'</strong></div><div class="meta-item">Pagamento: <strong>'+p.pagamento+'</strong></div>'+(p.observacao?'<div class="meta-item">Obs: <strong>'+p.observacao+'</strong></div>':'')+'</div>'
     +'<div class="order-total"><span class="order-total-label">Total do pedido</span><span class="order-total-val">'+fmtR(p.total)+'</span></div>'
-    +'<div class="order-details"><div class="detail-section"><div class="detail-title">Itens</div>'+itensHtml+'</div>'+endHtml
-    +(p.status==='Cancelado'
-      ? '<div style="padding:10px 0;text-align:center;font-size:13px;color:var(--red);font-weight:700;">PEDIDO CANCELADO</div>'
-      : '<div class="status-actions">'
-        +'<button class="status-btn btn-confirmar" onclick="mudarStatus(event,this,\''+p._id+'\',\'Confirmado\',\''+p.whatsapp+'\',\''+p.nome+'\')">Aceitar</button>'
-        +'<button class="status-btn btn-rota"      onclick="mudarStatus(event,this,\''+p._id+'\',\'Em Rota\',\''+p.whatsapp+'\',\''+p.nome+'\')">Saiu</button>'
-        +'<button class="status-btn btn-entregar"  onclick="mudarStatus(event,this,\''+p._id+'\',\'Entregue\',\''+p.whatsapp+'\',\''+p.nome+'\')">Entregue</button>'
-        +'<button class="status-btn btn-wpp"       onclick="abrirWpp(event,\''+p.whatsapp+'\',\''+p.nome+'\')">WhatsApp</button>'
-        +'<button class="status-btn btn-cancelar"  onclick="pedirConfirmacao(event,this,\''+p._id+'\',\''+p.whatsapp+'\',\''+p.nome+'\')">Cancelar</button>'
-        +'</div>'
-    )+'</div></div>';
+    +'<div class="order-details"><div class="detail-section"><div class="detail-title">Itens</div>'+itensHtml+'</div>'+endHtml+acoes+'</div></div>';
 }
 
 function toggleCard(id){ var c = document.getElementById('card-'+id); if(c) c.classList.toggle('expanded'); }
