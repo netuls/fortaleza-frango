@@ -244,7 +244,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);min
       <span class="sdot" id="sdot"></span>
       <span id="stxt">Verificando...</span>
     </div>
-    <div class="hero-info">Seg – Sáb &nbsp;·&nbsp; 6h30 às 11h30 &nbsp;·&nbsp; (85) 98740-7872</div>
+    <div class="hero-info">Seg – Dom &nbsp;·&nbsp; 6h30 às 11h30 &nbsp;·&nbsp; (85) 98740-7872</div>
   </div>
 
 </div>
@@ -795,7 +795,7 @@ function toggleCliCard() {
 // ── STATUS ──
 function atualizarStatus() {
   var a = new Date(), h = a.getHours(), t = h * 60 + a.getMinutes(), d = a.getDay();
-  var ok = d >= 1 && d <= 6 && t >= 390 && t < 690;
+  var ok = d >= 0 && d <= 6 && t >= 390 && t < 690;
   var pill = document.getElementById('spill'), dot = document.getElementById('sdot'), txt = document.getElementById('stxt');
   if (!pill) return;
   if (ok) {
