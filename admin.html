@@ -17,223 +17,229 @@
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
 /* LOGIN */
-.login-wrap{ min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px; }
-.login-box{
-  background:var(--surface);border:1px solid var(--border2);
-  border-radius:20px;padding:36px 28px;width:100%;max-width:360px;text-align:center;
-}
-.login-logo{ font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:1px; }
-.login-logo span{ color:var(--gold); }
-.login-sub{ font-size:13px;color:var(--text3);margin-bottom:28px; }
-.login-input{
-  width:100%;border:1px solid var(--border2);border-radius:12px;
-  padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;
-  outline:none;color:var(--text);background:var(--surface2);
-  margin-bottom:12px;transition:border .2s;
-}
-.login-input:focus{ border-color:var(--gold); }
-.login-input::placeholder{ color:var(--text3); }
-.login-btn{
-  width:100%;background:linear-gradient(135deg,var(--accent),#c0200a);color:#fff;border:none;
-  border-radius:50px;padding:14px;font-size:15px;font-weight:700;
-  cursor:pointer;transition:opacity .15s;
-}
-.login-btn:hover{ opacity:0.9; }
-.login-err{ font-size:13px;color:var(--red);margin-top:10px;display:none; }
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:36px 28px;width:100%;max-width:360px;text-align:center;}
+.login-logo{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:1px;}
+.login-logo span{color:var(--gold);}
+.login-sub{font-size:13px;color:var(--text3);margin-bottom:28px;}
+.login-input{width:100%;border:1px solid var(--border2);border-radius:12px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;color:var(--text);background:var(--surface2);margin-bottom:12px;transition:border .2s;}
+.login-input:focus{border-color:var(--gold);}
+.login-input::placeholder{color:var(--text3);}
+.login-btn{width:100%;background:linear-gradient(135deg,var(--accent),#c0200a);color:#fff;border:none;border-radius:50px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s;}
+.login-btn:hover{opacity:0.9;}
+.login-err{font-size:13px;color:var(--red);margin-top:10px;display:none;}
 
-/* ADMIN PANEL */
-.admin-wrap{ display:none;min-height:100vh; }
+/* ADMIN */
+.admin-wrap{display:none;min-height:100vh;}
 
 /* HEADER */
-.header{
-  background:var(--surface);border-bottom:1px solid var(--border);
-  padding:16px 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:50;
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.header-logo{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--text);letter-spacing:0.5px;}
+.header-logo span{color:var(--gold);}
+.header-right{display:flex;align-items:center;gap:12px;}
+.logout-btn{background:var(--surface2);border:1px solid var(--border2);color:var(--text2);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;}
+
+/* ══════════════════════════════════════
+   CARD LOJA ABERTA / FECHADA
+══════════════════════════════════════ */
+.loja-status-card{
+  margin:16px 16px 0;
+  border-radius:18px;
+  border:2px solid;
+  padding:18px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  transition:all .4s ease;
+  position:relative;
+  overflow:hidden;
 }
-.header-logo{ font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--text);letter-spacing:0.5px; }
-.header-logo span{ color:var(--gold); }
-.header-right{ display:flex;align-items:center;gap:12px; }
-.logout-btn{
-  background:var(--surface2);border:1px solid var(--border2);
-  color:var(--text2);border-radius:8px;padding:7px 14px;
-  font-size:13px;font-weight:600;cursor:pointer;
+.loja-status-card::before{
+  content:'';
+  position:absolute;inset:0;
+  opacity:0.04;
+  background:radial-gradient(ellipse at 80% 50%, currentColor 0%, transparent 70%);
+  transition:opacity .4s;
+}
+.loja-status-card.aberta{
+  background:rgba(34,197,94,0.07);
+  border-color:rgba(34,197,94,0.4);
+  color:var(--green);
+}
+.loja-status-card.fechada{
+  background:rgba(239,68,68,0.07);
+  border-color:rgba(239,68,68,0.35);
+  color:var(--red);
+}
+
+.loja-left{display:flex;align-items:center;gap:14px;}
+.loja-icon{font-size:32px;line-height:1;}
+
+.loja-info-title{
+  font-size:16px;font-weight:800;
+  letter-spacing:0.3px;
+  transition:color .3s;
+}
+.loja-status-card.aberta .loja-info-title{color:var(--green);}
+.loja-status-card.fechada .loja-info-title{color:var(--red);}
+
+.loja-info-sub{
+  font-size:12px;color:var(--text3);margin-top:3px;
+  font-weight:500;
+}
+
+/* Dot pulsante */
+.status-dot{
+  display:inline-block;
+  width:9px;height:9px;border-radius:50%;
+  margin-right:6px;
+  vertical-align:middle;
+  flex-shrink:0;
+}
+.dot-verde{
+  background:var(--green);
+  box-shadow:0 0 0 0 rgba(34,197,94,0.5);
+  animation:pulse-verde 2s infinite;
+}
+.dot-vermelho{
+  background:var(--red);
+  animation:none;
+}
+@keyframes pulse-verde{
+  0%{box-shadow:0 0 0 0 rgba(34,197,94,0.5);}
+  70%{box-shadow:0 0 0 8px rgba(34,197,94,0);}
+  100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}
+}
+
+/* ── Toggle switch ── */
+.toggle-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.toggle{
+  position:relative;width:58px;height:30px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.toggle input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-track{
+  position:absolute;inset:0;border-radius:50px;
+  background:rgba(239,68,68,0.25);
+  border:2px solid rgba(239,68,68,0.5);
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+}
+.toggle input:checked ~ .toggle-track{
+  background:rgba(34,197,94,0.25);
+  border-color:rgba(34,197,94,0.6);
+}
+.toggle-thumb{
+  position:absolute;top:4px;left:4px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--red);
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 2px 8px rgba(0,0,0,0.5);
+}
+.toggle input:checked ~ .toggle-track .toggle-thumb{
+  transform:translateX(28px);
+  background:var(--green);
+}
+
+.toggle-saving{
+  font-size:10px;color:var(--text3);
+  height:13px;text-align:center;
+  transition:opacity .2s;
+  font-weight:600;
 }
 
 /* STATS */
-.stats-grid{ display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:20px 16px 8px; }
-.stat-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:14px;padding:16px;
-}
-.stat-label{ font-size:11px;color:var(--text3);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px; }
-.stat-value{ font-size:24px;font-weight:700;color:var(--text); }
-.stat-value.green{ color:var(--green); }
-.stat-value.accent{ color:var(--accent); }
-.stat-value.yellow{ color:var(--gold); }
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px 16px 8px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;}
+.stat-label{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;}
+.stat-value{font-size:24px;font-weight:700;color:var(--text);}
+.stat-value.green{color:var(--green);}
+.stat-value.accent{color:var(--accent);}
+.stat-value.yellow{color:var(--gold);}
 
 /* FILTERS */
-.filters{ padding:8px 16px 12px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none; }
-.filters::-webkit-scrollbar{ display:none; }
-.filter-btn{
-  flex-shrink:0;border:1px solid var(--border2);border-radius:50px;
-  padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;
-  background:var(--surface2);color:var(--text2);white-space:nowrap;
-}
-.filter-btn.active{ background:var(--accent);color:#fff;border-color:var(--accent); }
+.filters{padding:8px 16px 12px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;}
+.filters::-webkit-scrollbar{display:none;}
+.filter-btn{flex-shrink:0;border:1px solid var(--border2);border-radius:50px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;background:var(--surface2);color:var(--text2);white-space:nowrap;}
+.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
 
-/* ── DATE FILTER ── */
-.date-filter-wrap{
-  padding:0 16px 12px;
-  display:flex;align-items:center;gap:8px;
-}
-.date-filter-label{
-  font-size:12px;font-weight:600;color:var(--text3);
-  white-space:nowrap;flex-shrink:0;
-}
-.date-input-wrap{
-  position:relative;flex:1;display:flex;align-items:center;
-}
-.date-input-wrap .date-icon{
-  position:absolute;left:12px;font-size:15px;pointer-events:none;
-  z-index:1;
-}
-.date-input{
-  width:100%;border:1px solid var(--border2);border-radius:12px;
-  padding:10px 12px 10px 36px;
-  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
-  outline:none;color:var(--text);background:var(--surface2);
-  transition:border .2s;
-  /* Estilo nativo do date picker */
-  color-scheme:dark;
-}
-.date-input:focus{ border-color:var(--gold); }
-.date-input.active{ border-color:var(--gold);background:rgba(245,166,35,0.08); }
-.date-clear-btn{
-  flex-shrink:0;
-  border:1px solid var(--border2);border-radius:50px;
-  padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;
-  background:var(--surface2);color:var(--text3);white-space:nowrap;
-  transition:all .15s;
-}
-.date-clear-btn:hover{ border-color:var(--gold);color:var(--gold); }
-
-/* Data exibida badge no topo */
-.date-active-badge{
-  margin:0 16px 10px;
-  padding:9px 16px;
-  background:rgba(245,166,35,0.08);
-  border:1px solid rgba(245,166,35,0.3);
-  border-radius:10px;
-  display:none;
-  align-items:center;justify-content:space-between;
-}
-.date-active-badge.visible{ display:flex; }
-.date-active-badge-text{ font-size:13px;font-weight:600;color:var(--gold); }
-.date-active-badge-sub{ font-size:11px;color:var(--text3);margin-top:1px; }
+/* DATE FILTER */
+.date-filter-wrap{padding:0 16px 12px;display:flex;align-items:center;gap:8px;}
+.date-filter-label{font-size:12px;font-weight:600;color:var(--text3);white-space:nowrap;flex-shrink:0;}
+.date-input-wrap{position:relative;flex:1;display:flex;align-items:center;}
+.date-input-wrap .date-icon{position:absolute;left:12px;font-size:15px;pointer-events:none;z-index:1;}
+.date-input{width:100%;border:1px solid var(--border2);border-radius:12px;padding:10px 12px 10px 36px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;outline:none;color:var(--text);background:var(--surface2);transition:border .2s;color-scheme:dark;}
+.date-input:focus{border-color:var(--gold);}
+.date-input.active{border-color:var(--gold);background:rgba(245,166,35,0.08);}
+.date-clear-btn{flex-shrink:0;border:1px solid var(--border2);border-radius:50px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text3);white-space:nowrap;transition:all .15s;}
+.date-clear-btn:hover{border-color:var(--gold);color:var(--gold);}
+.date-active-badge{margin:0 16px 10px;padding:9px 16px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3);border-radius:10px;display:none;align-items:center;justify-content:space-between;}
+.date-active-badge.visible{display:flex;}
+.date-active-badge-text{font-size:13px;font-weight:600;color:var(--gold);}
+.date-active-badge-sub{font-size:11px;color:var(--text3);margin-top:1px;}
 
 /* SEARCH */
-.search-wrap{ padding:0 16px 12px; }
-.search-input{
-  width:100%;border:1px solid var(--border2);border-radius:12px;
-  padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:14px;
-  outline:none;color:var(--text);background:var(--surface2);transition:border .2s;
-}
-.search-input:focus{ border-color:var(--gold); }
-.search-input::placeholder{ color:var(--text3); }
+.search-wrap{padding:0 16px 12px;}
+.search-input{width:100%;border:1px solid var(--border2);border-radius:12px;padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;color:var(--text);background:var(--surface2);transition:border .2s;}
+.search-input:focus{border-color:var(--gold);}
+.search-input::placeholder{color:var(--text3);}
 
 /* TOTAL FILTRO */
-.total-filtro-bar{
-  margin:0 16px 10px;padding:10px 16px;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:10px;display:flex;justify-content:space-between;align-items:center;
-}
-.total-filtro-label{ font-size:12px;color:var(--text3);font-weight:600; }
-.total-filtro-val{ font-size:16px;font-weight:700;color:var(--gold); }
+.total-filtro-bar{margin:0 16px 10px;padding:10px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;justify-content:space-between;align-items:center;}
+.total-filtro-label{font-size:12px;color:var(--text3);font-weight:600;}
+.total-filtro-val{font-size:16px;font-weight:700;color:var(--gold);}
 
-/* ORDERS LIST */
-.orders-wrap{ padding:0 16px 100px; }
-.section-label{
-  font-size:11px;font-weight:600;color:var(--text3);
-  letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;padding-top:4px;
-}
-.order-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:14px;padding:16px;margin-bottom:10px;
-  cursor:pointer;transition:border-color .2s;
-}
-.order-card:hover{ border-color:var(--border2); }
-.order-card.expanded{ border-color:var(--accent); }
-
-.order-top{ display:flex;align-items:flex-start;justify-content:space-between;gap:8px; }
-.order-name{ font-size:15px;font-weight:700;color:var(--text); }
-.order-wpp{ font-size:12px;color:var(--text3);margin-top:2px; }
-.order-badge{ flex-shrink:0;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px; }
-.badge-novo{ background:rgba(59,130,246,0.15);color:var(--blue); }
-.badge-confirmado{ background:rgba(34,197,94,0.15);color:var(--green); }
-.badge-entregue{ background:rgba(90,90,84,0.3);color:var(--text3); }
-.badge-cancelado{ background:rgba(239,68,68,0.15);color:var(--red); }
-.badge-preparo{ background:rgba(245,158,11,0.15);color:var(--yellow); }
-.badge-rota{ background:rgba(139,92,246,0.15);color:#A78BFA; }
-
-.order-meta{ display:flex;gap:12px;margin-top:10px;flex-wrap:wrap; }
-.meta-item{ font-size:12px;color:var(--text3);display:flex;align-items:center;gap:4px; }
-.meta-item strong{ color:var(--text2);font-weight:600; }
-
-.order-total{
-  margin-top:10px;padding-top:10px;
-  border-top:1px solid var(--border);
-  display:flex;justify-content:space-between;align-items:center;
-}
-.order-total-label{ font-size:13px;color:var(--text3);font-weight:500; }
-.order-total-val{ font-size:18px;font-weight:700;color:var(--gold); }
-
-/* EXPANDED */
-.order-details{ display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border); }
-.order-card.expanded .order-details{ display:block; }
-.detail-section{ margin-bottom:12px; }
-.detail-title{ font-size:11px;font-weight:600;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px; }
-.item-row{ display:flex;justify-content:space-between;font-size:13px;color:var(--text2);padding:4px 0; }
-.item-row-name{ flex:1; }
-.item-row-price{ font-weight:600;color:var(--text); }
-.address-block{ font-size:13px;color:var(--text2);line-height:1.6; }
-
-/* STATUS ACTIONS */
-.status-actions{ display:flex;gap:8px;margin-top:12px;flex-wrap:wrap; }
-.status-btn{ flex:1;border:none;border-radius:8px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;min-width:80px; }
-.btn-confirmar{ background:rgba(34,197,94,0.15);color:var(--green); }
-.btn-entregar{ background:rgba(59,130,246,0.15);color:var(--blue); }
-.btn-cancelar{ background:rgba(239,68,68,0.15);color:var(--red); }
-.btn-rota{ background:rgba(139,92,246,0.15);color:#A78BFA; }
-.btn-wpp{ background:rgba(34,197,94,0.15);color:var(--green); }
-
-/* EMPTY */
-.empty{ text-align:center;padding:60px 20px;color:var(--text3); }
-.empty-icon{ font-size:48px;margin-bottom:12px;opacity:0.4; }
-.empty-text{ font-size:15px;font-weight:500; }
-.loading{ text-align:center;padding:40px;color:var(--text3);font-size:14px; }
+/* ORDERS */
+.orders-wrap{padding:0 16px 100px;}
+.section-label{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;padding-top:4px;}
+.order-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color .2s;}
+.order-card:hover{border-color:var(--border2);}
+.order-card.expanded{border-color:var(--accent);}
+.order-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.order-name{font-size:15px;font-weight:700;color:var(--text);}
+.order-wpp{font-size:12px;color:var(--text3);margin-top:2px;}
+.order-badge{flex-shrink:0;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px;}
+.badge-novo{background:rgba(59,130,246,0.15);color:var(--blue);}
+.badge-confirmado{background:rgba(34,197,94,0.15);color:var(--green);}
+.badge-entregue{background:rgba(90,90,84,0.3);color:var(--text3);}
+.badge-cancelado{background:rgba(239,68,68,0.15);color:var(--red);}
+.badge-preparo{background:rgba(245,158,11,0.15);color:var(--yellow);}
+.badge-rota{background:rgba(139,92,246,0.15);color:#A78BFA;}
+.order-meta{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;}
+.meta-item{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:4px;}
+.meta-item strong{color:var(--text2);font-weight:600;}
+.order-total{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.order-total-label{font-size:13px;color:var(--text3);font-weight:500;}
+.order-total-val{font-size:18px;font-weight:700;color:var(--gold);}
+.order-details{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.order-card.expanded .order-details{display:block;}
+.detail-section{margin-bottom:12px;}
+.detail-title{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;}
+.item-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text2);padding:4px 0;}
+.item-row-name{flex:1;}
+.item-row-price{font-weight:600;color:var(--text);}
+.address-block{font-size:13px;color:var(--text2);line-height:1.6;}
+.status-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.status-btn{flex:1;border:none;border-radius:8px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;min-width:80px;}
+.btn-confirmar{background:rgba(34,197,94,0.15);color:var(--green);}
+.btn-entregar{background:rgba(59,130,246,0.15);color:var(--blue);}
+.btn-cancelar{background:rgba(239,68,68,0.15);color:var(--red);}
+.btn-rota{background:rgba(139,92,246,0.15);color:#A78BFA;}
+.btn-wpp{background:rgba(34,197,94,0.15);color:var(--green);}
+.empty{text-align:center;padding:60px 20px;color:var(--text3);}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:0.4;}
+.empty-text{font-size:15px;font-weight:500;}
+.loading{text-align:center;padding:40px;color:var(--text3);font-size:14px;}
 
 /* CONFIRM MODAL */
-.confirm-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,0.8);
-  z-index:999;display:flex;align-items:center;justify-content:center;
-  padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;
-  backdrop-filter:blur(4px);
-}
-.confirm-overlay.open{ opacity:1;pointer-events:all; }
-.confirm-box{
-  background:var(--surface);border:1px solid var(--border2);
-  border-radius:20px;padding:28px 24px;width:100%;max-width:320px;
-  text-align:center;transform:scale(0.93);transition:transform .2s;
-}
-.confirm-overlay.open .confirm-box{ transform:scale(1); }
-.confirm-icon{ font-size:40px;margin-bottom:12px; }
-.confirm-title{ font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px; }
-.confirm-msg{ font-size:13px;color:var(--text3);line-height:1.5;margin-bottom:22px; }
-.confirm-actions{ display:flex;gap:10px; }
-.confirm-btn{ flex:1;border:none;border-radius:50px;padding:13px;font-size:14px;font-weight:700;cursor:pointer; }
-.confirm-btn-nao{ background:var(--surface2);color:var(--text2);border:1px solid var(--border2); }
-.confirm-btn-sim{ background:var(--red);color:#fff; }
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(4px);}
+.confirm-overlay.open{opacity:1;pointer-events:all;}
+.confirm-box{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:28px 24px;width:100%;max-width:320px;text-align:center;transform:scale(0.93);transition:transform .2s;}
+.confirm-overlay.open .confirm-box{transform:scale(1);}
+.confirm-icon{font-size:40px;margin-bottom:12px;}
+.confirm-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.confirm-msg{font-size:13px;color:var(--text3);line-height:1.5;margin-bottom:22px;}
+.confirm-actions{display:flex;gap:10px;}
+.confirm-btn{flex:1;border:none;border-radius:50px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;}
+.confirm-btn-nao{background:var(--surface2);color:var(--text2);border:1px solid var(--border2);}
+.confirm-btn-sim{background:var(--red);color:#fff;}
 </style>
 </head>
 <body>
@@ -260,6 +266,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 
+  <!-- ══ CARD STATUS DA LOJA ══ -->
+  <div class="loja-status-card fechada" id="loja-status-card">
+    <div class="loja-left">
+      <div class="loja-icon" id="loja-icon">🔒</div>
+      <div>
+        <div class="loja-info-title" id="loja-info-title">
+          <span class="status-dot dot-vermelho" id="loja-dot"></span>
+          LOJA FECHADA
+        </div>
+        <div class="loja-info-sub" id="loja-info-sub">Clientes não podem fazer pedidos agora</div>
+      </div>
+    </div>
+    <div class="toggle-wrap">
+      <label class="toggle">
+        <input type="checkbox" id="loja-toggle" onchange="alternarStatusLoja()">
+        <div class="toggle-track">
+          <div class="toggle-thumb"></div>
+        </div>
+      </label>
+      <div class="toggle-saving" id="toggle-saving"></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-label">Faturamento Hoje</div>
@@ -296,17 +326,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <span class="date-filter-label">📅 Data:</span>
     <div class="date-input-wrap">
       <span class="date-icon">📆</span>
-      <input
-        class="date-input"
-        id="date-filter"
-        type="date"
-        oninput="onDateChange()"
-      >
+      <input class="date-input" id="date-filter" type="date" oninput="onDateChange()">
     </div>
     <button class="date-clear-btn" onclick="limparData()">Limpar</button>
   </div>
 
-  <!-- BADGE DE DATA ATIVA -->
   <div class="date-active-badge" id="date-active-badge">
     <div>
       <div class="date-active-badge-text" id="date-badge-text">—</div>
@@ -343,13 +367,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.0/firebase-app-compat.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.0/firebase-firestore-compat.min.js"></script>
 <script>
-// ============================================================
-// CONFIGURACAO DO FIREBASE
-// ============================================================
+// ── CONFIG FIREBASE ──
 const firebaseConfig = {
   apiKey: "AIzaSyAI6Z4Ay6atavjrsBAfc0XWndjeAX8zbCM",
   authDomain: "admin-restaurante-ebc77.firebaseapp.com",
@@ -373,7 +394,6 @@ function fazerLogin(){
   if(u === ADMIN_USER && p === ADMIN_PASS){
     document.getElementById('login-wrap').style.display = 'none';
     document.getElementById('admin-wrap').style.display = 'block';
-    // Pré-seleciona hoje no input de data
     setDataHoje();
     iniciarFirebase();
   } else {
@@ -388,91 +408,16 @@ function fazerLogout(){
   document.getElementById('admin-wrap').style.display = 'none';
   document.getElementById('login-user').value = '';
   document.getElementById('login-pass').value = '';
-  if(db) db = null;
-}
-
-// ── HELPERS DE DATA ──
-
-// Retorna hoje no formato yyyy-mm-dd (valor do input[type=date])
-function getHojeISO(){
-  var d = new Date();
-  var mm = String(d.getMonth()+1).padStart(2,'0');
-  var dd = String(d.getDate()).padStart(2,'0');
-  return d.getFullYear()+'-'+mm+'-'+dd;
-}
-
-// Converte yyyy-mm-dd → dd/mm/yyyy (formato dos pedidos no Firestore)
-function isoParaBR(iso){
-  if(!iso) return null;
-  var p = iso.split('-');
-  return p[2]+'/'+p[1]+'/'+p[0];
-}
-
-// Formata data BR para exibição amigável: "18/03/2025 — Terça-feira"
-function formatarDataBonita(iso){
-  if(!iso) return '';
-  var d = new Date(iso+'T12:00:00');
-  var dias = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
-  var meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  return d.getDate()+' de '+meses[d.getMonth()]+' de '+d.getFullYear()+' — '+dias[d.getDay()];
-}
-
-// Define o input de data para hoje
-function setDataHoje(){
-  var input = document.getElementById('date-filter');
-  input.value = getHojeISO();
-  input.classList.add('active');
-  atualizarBadgeData();
-}
-
-// Callback quando usuário muda a data no input
-function onDateChange(){
-  var input = document.getElementById('date-filter');
-  if(input.value){
-    input.classList.add('active');
-    atualizarBadgeData();
-  } else {
-    input.classList.remove('active');
-    document.getElementById('date-active-badge').classList.remove('visible');
-  }
-  atualizarStats();
-  renderPedidos();
-}
-
-// Limpa o filtro de data (volta para "todos" ou respeita filtro de status atual)
-function limparData(){
-  var input = document.getElementById('date-filter');
-  input.value = '';
-  input.classList.remove('active');
-  document.getElementById('date-active-badge').classList.remove('visible');
-  atualizarStats();
-  renderPedidos();
-}
-
-// Atualiza o badge com a data formatada
-function atualizarBadgeData(){
-  var input = document.getElementById('date-filter');
-  var badge = document.getElementById('date-active-badge');
-  var texto = document.getElementById('date-badge-text');
-  if(input.value){
-    var hojeISO = getHojeISO();
-    var label = formatarDataBonita(input.value);
-    if(input.value === hojeISO) label = '📅 Hoje — ' + label;
-    texto.textContent = label;
-    badge.classList.add('visible');
-  } else {
-    badge.classList.remove('visible');
-  }
+  db = null;
 }
 
 // ── FIREBASE ──
 function iniciarFirebase(){
   try {
-    if(!firebase.apps.length){
-      firebase.initializeApp(firebaseConfig);
-    }
+    if(!firebase.apps.length){ firebase.initializeApp(firebaseConfig); }
     db = firebase.firestore();
     db.settings({ experimentalAutoDetectLongPolling: true });
+    carregarStatusLoja(); // carrega o status da loja primeiro
     carregarPedidos();
   } catch(e){
     document.getElementById('orders-wrap').innerHTML =
@@ -480,6 +425,76 @@ function iniciarFirebase(){
   }
 }
 
+// ════════════════════════════════════════════════
+//  STATUS DA LOJA — ABERTA / FECHADA
+// ════════════════════════════════════════════════
+
+/**
+ * Documento no Firestore: configuracoes/loja
+ * Campo: aberta (boolean)
+ *
+ * O index.html lê esse campo em tempo real via onSnapshot
+ * e exibe ou oculta o formulário de pedido conforme o valor.
+ */
+
+function carregarStatusLoja(){
+  if(!db) return;
+  db.collection('configuracoes').doc('loja').get()
+    .then(function(doc){
+      var aberta = doc.exists ? doc.data().aberta : false;
+      aplicarStatusLoja(aberta);
+    })
+    .catch(function(){ aplicarStatusLoja(false); });
+}
+
+function aplicarStatusLoja(aberta){
+  var toggle  = document.getElementById('loja-toggle');
+  var card    = document.getElementById('loja-status-card');
+  var icon    = document.getElementById('loja-icon');
+  var title   = document.getElementById('loja-info-title');
+  var sub     = document.getElementById('loja-info-sub');
+  var dot     = document.getElementById('loja-dot');
+
+  toggle.checked = aberta;
+
+  if(aberta){
+    card.className  = 'loja-status-card aberta';
+    icon.textContent = '🟢';
+    dot.className   = 'status-dot dot-verde';
+    title.innerHTML = '<span class="status-dot dot-verde"></span> LOJA ABERTA';
+    sub.textContent = 'Aceitando pedidos agora';
+  } else {
+    card.className  = 'loja-status-card fechada';
+    icon.textContent = '🔒';
+    dot.className   = 'status-dot dot-vermelho';
+    title.innerHTML = '<span class="status-dot dot-vermelho"></span> LOJA FECHADA';
+    sub.textContent = 'Clientes não podem fazer pedidos agora';
+  }
+}
+
+function alternarStatusLoja(){
+  if(!db){ alert('Firebase não conectado.'); return; }
+  var toggle  = document.getElementById('loja-toggle');
+  var novoStatus = toggle.checked;
+  var saving  = document.getElementById('toggle-saving');
+
+  saving.textContent = 'Salvando...';
+
+  db.collection('configuracoes').doc('loja').set({ aberta: novoStatus }, { merge: true })
+    .then(function(){
+      aplicarStatusLoja(novoStatus);
+      saving.textContent = novoStatus ? '✓ Salvo — Aberta' : '✓ Salvo — Fechada';
+      setTimeout(function(){ saving.textContent = ''; }, 2500);
+    })
+    .catch(function(err){
+      saving.textContent = 'Erro ao salvar';
+      toggle.checked = !novoStatus; // reverte
+      aplicarStatusLoja(!novoStatus);
+      setTimeout(function(){ saving.textContent = ''; }, 3000);
+    });
+}
+
+// ── PEDIDOS ──
 function carregarPedidos(){
   if(!db) return;
   document.getElementById('orders-wrap').innerHTML = '<div class="loading">Atualizando pedidos...</div>';
@@ -487,8 +502,7 @@ function carregarPedidos(){
     .then(function(snap){
       todosOsPedidos = [];
       snap.forEach(function(doc){
-        var d = doc.data();
-        d._id = doc.id;
+        var d = doc.data(); d._id = doc.id;
         todosOsPedidos.push(d);
       });
       atualizarStats();
@@ -500,94 +514,103 @@ function carregarPedidos(){
     });
 }
 
-// ── STATS ── respeita a data selecionada no input
+// ── HELPERS DATA ──
+function getHojeISO(){
+  var d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function isoParaBR(iso){
+  if(!iso) return null;
+  var p = iso.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
+}
+function formatarDataBonita(iso){
+  if(!iso) return '';
+  var d = new Date(iso+'T12:00:00');
+  var dias = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+  var meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  return d.getDate()+' de '+meses[d.getMonth()]+' de '+d.getFullYear()+' — '+dias[d.getDay()];
+}
+function setDataHoje(){
+  var input = document.getElementById('date-filter');
+  input.value = getHojeISO(); input.classList.add('active');
+  atualizarBadgeData();
+}
+function onDateChange(){
+  var input = document.getElementById('date-filter');
+  if(input.value){ input.classList.add('active'); atualizarBadgeData(); }
+  else { input.classList.remove('active'); document.getElementById('date-active-badge').classList.remove('visible'); }
+  atualizarStats(); renderPedidos();
+}
+function limparData(){
+  var input = document.getElementById('date-filter');
+  input.value = ''; input.classList.remove('active');
+  document.getElementById('date-active-badge').classList.remove('visible');
+  atualizarStats(); renderPedidos();
+}
+function atualizarBadgeData(){
+  var input = document.getElementById('date-filter');
+  var badge = document.getElementById('date-active-badge');
+  var texto = document.getElementById('date-badge-text');
+  if(input.value){
+    var label = formatarDataBonita(input.value);
+    if(input.value === getHojeISO()) label = '📅 Hoje — '+label;
+    texto.textContent = label;
+    badge.classList.add('visible');
+  } else { badge.classList.remove('visible'); }
+}
+
+// ── STATS ──
 function atualizarStats(){
   var dateInput = document.getElementById('date-filter').value;
   var dataBR = dateInput ? isoParaBR(dateInput) : new Date().toLocaleDateString('pt-BR');
-
-  var pedidosDia = todosOsPedidos.filter(function(p){
-    return p.data === dataBR && p.status !== 'Cancelado';
-  });
+  var pedidosDia = todosOsPedidos.filter(function(p){ return p.data===dataBR && p.status!=='Cancelado'; });
   var totalDia = pedidosDia.reduce(function(s,p){ return s+p.total; },0);
-  var ticket   = pedidosDia.length > 0 ? totalDia / pedidosDia.length : 0;
-
-  // Atualiza label do card dinamicamente
+  var ticket = pedidosDia.length > 0 ? totalDia/pedidosDia.length : 0;
   var hoje = new Date().toLocaleDateString('pt-BR');
-  var label = (dataBR === hoje) ? 'Faturamento Hoje' : 'Faturamento '+dataBR;
-  var labelPedidos = (dataBR === hoje) ? 'Pedidos Hoje' : 'Pedidos '+dataBR;
-  document.querySelector('[for-stat="total"]')   && (document.querySelector('[for-stat="total"]').textContent   = label);
-  document.querySelector('[for-stat="pedidos"]') && (document.querySelector('[for-stat="pedidos"]').textContent = labelPedidos);
-  // labels direto pelo índice (mais simples)
   var labels = document.querySelectorAll('.stat-label');
-  if(labels[0]) labels[0].textContent = label;
-  if(labels[1]) labels[1].textContent = labelPedidos;
-
+  if(labels[0]) labels[0].textContent = (dataBR===hoje)?'Faturamento Hoje':'Faturamento '+dataBR;
+  if(labels[1]) labels[1].textContent = (dataBR===hoje)?'Pedidos Hoje':'Pedidos '+dataBR;
   document.getElementById('stat-total').textContent   = fmtR(totalDia);
   document.getElementById('stat-pedidos').textContent = pedidosDia.length;
   document.getElementById('stat-ticket').textContent  = fmtR(ticket);
 }
 
-// ── FILTRAR (botões de status) ──
+// ── FILTRAR ──
 function filtrar(tipo, btn){
   filtroAtual = tipo;
   document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
-
-  // Se clicou em "Hoje", define a data de hoje no input
-  if(tipo === 'hoje'){
-    setDataHoje();
-  }
-  // Se clicou em "Todos", limpa a data
-  if(tipo === 'todos'){
-    limparData();
-  }
-
+  if(tipo==='hoje') setDataHoje();
+  if(tipo==='todos') limparData();
   renderPedidos();
 }
 
 // ── RENDER PEDIDOS ──
 function renderPedidos(){
-  var busca = (document.getElementById('busca').value||'').toLowerCase();
-  var hoje  = new Date().toLocaleDateString('pt-BR');
-  var dateInput = document.getElementById('date-filter').value; // yyyy-mm-dd ou ''
-  var dataBR = dateInput ? isoParaBR(dateInput) : null; // dd/mm/yyyy ou null
+  var busca   = (document.getElementById('busca').value||'').toLowerCase();
+  var hoje    = new Date().toLocaleDateString('pt-BR');
+  var dateInput = document.getElementById('date-filter').value;
+  var dataBR  = dateInput ? isoParaBR(dateInput) : null;
 
   var lista = todosOsPedidos.filter(function(p){
-    // ── Filtro de DATA ──
-    if(dataBR){
-      // Se há data selecionada, filtra por ela (sobrepõe "hoje"/"todos")
-      if(p.data !== dataBR) return false;
-    } else {
-      // Sem data: respeita filtroAtual
-      if(filtroAtual === 'hoje' && p.data !== hoje) return false;
-      // 'todos' → sem filtro de data
-    }
-
-    // ── Filtro de STATUS ──
-    // Quando filtroAtual é 'hoje' ou 'todos', não filtra por status
-    if(filtroAtual !== 'hoje' && filtroAtual !== 'todos'){
-      if(p.status !== filtroAtual) return false;
-    }
-
-    // ── Busca ──
+    if(dataBR){ if(p.data!==dataBR) return false; }
+    else { if(filtroAtual==='hoje' && p.data!==hoje) return false; }
+    if(filtroAtual!=='hoje' && filtroAtual!=='todos'){ if(p.status!==filtroAtual) return false; }
     if(busca && !p.nome.toLowerCase().includes(busca) && !(p.whatsapp||'').includes(busca)) return false;
-
     return true;
   });
 
-  // Atualiza total filtrado
   var totalFiltrado = lista.reduce(function(s,p){ return s+p.total; },0);
   var bar = document.getElementById('total-filtrado-bar');
   if(bar) bar.textContent = fmtR(totalFiltrado);
   var sc = document.getElementById('total-filtrado');
   if(sc) sc.textContent = fmtR(totalFiltrado);
 
-  if(lista.length === 0){
+  if(lista.length===0){
     document.getElementById('orders-wrap').innerHTML =
       '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nenhum pedido encontrado</div></div>';
     return;
   }
-
   var html = '<div class="section-label">'+lista.length+' pedido(s)</div>';
   lista.forEach(function(p){ html += buildCard(p); });
   document.getElementById('orders-wrap').innerHTML = html;
@@ -595,49 +618,17 @@ function renderPedidos(){
 
 // ── BUILD CARD ──
 function buildCard(p){
-  var badgeClass = {
-    'Novo':'badge-novo','Confirmado':'badge-confirmado',
-    'Em Preparo':'badge-preparo','Em Rota':'badge-rota',
-    'Entregue':'badge-entregue','Cancelado':'badge-cancelado'
-  }[p.status] || 'badge-novo';
-
+  var badgeClass = {'Novo':'badge-novo','Confirmado':'badge-confirmado','Em Preparo':'badge-preparo','Em Rota':'badge-rota','Entregue':'badge-entregue','Cancelado':'badge-cancelado'}[p.status]||'badge-novo';
   var itensHtml = '';
-  if(p.itens && p.itens.length){
-    p.itens.forEach(function(i){
-      itensHtml += '<div class="item-row">'
-        +'<span class="item-row-name">'+i.nome+(i.extra?' ('+i.extra+')':'')+'</span>'
-        +'<span class="item-row-price">'+fmtR(i.preco)+'</span>'
-        +'</div>';
-    });
-  }
-
+  if(p.itens&&p.itens.length){ p.itens.forEach(function(i){ itensHtml += '<div class="item-row"><span class="item-row-name">'+i.nome+(i.extra?' ('+i.extra+')':'')+'</span><span class="item-row-price">'+fmtR(i.preco)+'</span></div>'; }); }
   var endHtml = '';
-  if(p.tipo === 'Entrega'){
-    endHtml = '<div class="detail-section">'
-      +'<div class="detail-title">Endereço de entrega</div>'
-      +'<div class="address-block">'+p.endereco+'<br>'+p.bairro+' — CEP: '+p.cep+'</div>'
-      +'</div>';
-  }
-
+  if(p.tipo==='Entrega'){ endHtml = '<div class="detail-section"><div class="detail-title">Endereço de entrega</div><div class="address-block">'+p.endereco+'<br>'+p.bairro+' — CEP: '+p.cep+'</div></div>'; }
   return '<div class="order-card" id="card-'+p._id+'" onclick="toggleCard(\''+p._id+'\')">'
-    +'<div class="order-top">'
-    +'<div><div class="order-name">'+p.nome+'</div>'
-    +'<div class="order-wpp">'+(p.whatsapp||'')+' &bull; '+p.data+' '+p.hora+'</div></div>'
-    +'<span class="order-badge '+badgeClass+'">'+p.status+'</span>'
-    +'</div>'
-    +'<div class="order-meta">'
-    +'<div class="meta-item">Tipo: <strong>'+p.tipo+'</strong></div>'
-    +'<div class="meta-item">Pagamento: <strong>'+p.pagamento+'</strong></div>'
-    +(p.observacao?'<div class="meta-item">Obs: <strong>'+p.observacao+'</strong></div>':'')
-    +'</div>'
-    +'<div class="order-total">'
-    +'<span class="order-total-label">Total do pedido</span>'
-    +'<span class="order-total-val">'+fmtR(p.total)+'</span>'
-    +'</div>'
-    +'<div class="order-details">'
-    +'<div class="detail-section"><div class="detail-title">Itens</div>'+itensHtml+'</div>'
-    +endHtml
-    +(p.status === 'Cancelado'
+    +'<div class="order-top"><div><div class="order-name">'+p.nome+'</div><div class="order-wpp">'+(p.whatsapp||'')+' &bull; '+p.data+' '+p.hora+'</div></div><span class="order-badge '+badgeClass+'">'+p.status+'</span></div>'
+    +'<div class="order-meta"><div class="meta-item">Tipo: <strong>'+p.tipo+'</strong></div><div class="meta-item">Pagamento: <strong>'+p.pagamento+'</strong></div>'+(p.observacao?'<div class="meta-item">Obs: <strong>'+p.observacao+'</strong></div>':'')+'</div>'
+    +'<div class="order-total"><span class="order-total-label">Total do pedido</span><span class="order-total-val">'+fmtR(p.total)+'</span></div>'
+    +'<div class="order-details"><div class="detail-section"><div class="detail-title">Itens</div>'+itensHtml+'</div>'+endHtml
+    +(p.status==='Cancelado'
       ? '<div style="padding:10px 0;text-align:center;font-size:13px;color:var(--red);font-weight:700;">PEDIDO CANCELADO</div>'
       : '<div class="status-actions">'
         +'<button class="status-btn btn-confirmar" onclick="mudarStatus(event,this,\''+p._id+'\',\'Confirmado\',\''+p.whatsapp+'\',\''+p.nome+'\')">Aceitar</button>'
@@ -646,78 +637,54 @@ function buildCard(p){
         +'<button class="status-btn btn-wpp"       onclick="abrirWpp(event,\''+p.whatsapp+'\',\''+p.nome+'\')">WhatsApp</button>'
         +'<button class="status-btn btn-cancelar"  onclick="pedirConfirmacao(event,this,\''+p._id+'\',\''+p.whatsapp+'\',\''+p.nome+'\')">Cancelar</button>'
         +'</div>'
-    )
-    +'</div>'
-    +'</div>';
+    )+'</div></div>';
 }
 
-// ── TOGGLE CARD ──
-function toggleCard(id){
-  var card = document.getElementById('card-'+id);
-  if(card) card.classList.toggle('expanded');
-}
+function toggleCard(id){ var c = document.getElementById('card-'+id); if(c) c.classList.toggle('expanded'); }
 
-// ── MUDAR STATUS ──
-function mudarStatus(e, btn, id, novoStatus, wpp, nome, isCancelamento){
+function mudarStatus(e,btn,id,novoStatus,wpp,nome,isCancelamento){
   e.stopPropagation();
   if(!db){ alert('Firebase não conectado.'); return; }
-  if(btn){ btn._orig = btn.textContent; btn.textContent = '...'; btn.disabled = true; }
+  if(btn){ btn._orig=btn.textContent; btn.textContent='...'; btn.disabled=true; }
   db.collection('pedidos').doc(id).update({ status: novoStatus })
     .then(function(){
       var p = todosOsPedidos.find(function(x){ return x._id===id; });
       if(p) p.status = novoStatus;
       if(isCancelamento) atualizarStats();
       renderPedidos();
-
       var msgs = {
         'Confirmado':'Prezado(a) '+nome+', informamos que o seu pedido foi recebido e confirmado pelo Fortaleza Frango. Em breve daremos continuidade ao atendimento.',
         'Em Rota':'Prezado(a) '+nome+', seu pedido saiu para entrega. Em breve estara em suas maos. Agradecemos a preferencia.',
         'Entregue':'Prezado(a) '+nome+', seu pedido foi entregue com sucesso. Obrigado por escolher o Fortaleza Frango. Esperamos te atender novamente em breve.'
       };
-      if(msgs[novoStatus] && wpp){
-        var link = 'https://wa.me/55'+wpp+'?text='+encodeURIComponent(msgs[novoStatus]);
-        window.open(link,'_blank');
-      }
+      if(msgs[novoStatus]&&wpp){ window.open('https://wa.me/55'+wpp+'?text='+encodeURIComponent(msgs[novoStatus]),'_blank'); }
     })
     .catch(function(err){
-      if(btn){ btn.textContent = btn._orig; btn.disabled = false; }
+      if(btn){ btn.textContent=btn._orig; btn.disabled=false; }
       alert('Erro: '+err.message);
     });
 }
 
-// ── ABRIR WHATSAPP ──
-function abrirWpp(e, wpp, nome){
+function abrirWpp(e,wpp,nome){
   e.stopPropagation();
-  var msg = 'Prezado(a) '+nome+', aqui e o Fortaleza Frango. Gostaríamos de entrar em contato sobre o seu pedido.';
-  window.open('https://wa.me/55'+wpp+'?text='+encodeURIComponent(msg),'_blank');
+  window.open('https://wa.me/55'+wpp+'?text='+encodeURIComponent('Prezado(a) '+nome+', aqui e o Fortaleza Frango. Gostaríamos de entrar em contato sobre o seu pedido.'),'_blank');
 }
 
-// ── CONFIRMACAO CANCELAMENTO ──
 var _cancelPending = null;
-
-function pedirConfirmacao(e, btn, id, wpp, nome){
-  e.stopPropagation();
-  _cancelPending = {btn, id, wpp, nome};
-  document.getElementById('confirm-overlay').classList.add('open');
-}
-function fecharConfirm(){
-  _cancelPending = null;
-  document.getElementById('confirm-overlay').classList.remove('open');
-}
+function pedirConfirmacao(e,btn,id,wpp,nome){ e.stopPropagation(); _cancelPending={btn,id,wpp,nome}; document.getElementById('confirm-overlay').classList.add('open'); }
+function fecharConfirm(){ _cancelPending=null; document.getElementById('confirm-overlay').classList.remove('open'); }
 function confirmarCancelamento(){
   if(!_cancelPending) return;
   document.getElementById('confirm-overlay').classList.remove('open');
-  var p2 = _cancelPending; _cancelPending = null;
-  mudarStatus({stopPropagation:function(){}}, p2.btn, p2.id, 'Cancelado', p2.wpp, p2.nome, true);
+  var p2=_cancelPending; _cancelPending=null;
+  mudarStatus({stopPropagation:function(){}},p2.btn,p2.id,'Cancelado',p2.wpp,p2.nome,true);
 }
 
-// ── HELPERS ──
 function fmtR(v){ return 'R$ '+(v||0).toFixed(2).replace('.',','); }
 
-// Auto-refresh a cada 60 segundos
 setInterval(function(){
-  if(db && document.getElementById('admin-wrap').style.display !== 'none') carregarPedidos();
-}, 60000);
+  if(db && document.getElementById('admin-wrap').style.display!=='none') carregarPedidos();
+},60000);
 </script>
 </body>
 </html>
