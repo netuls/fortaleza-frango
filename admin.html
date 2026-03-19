@@ -341,13 +341,16 @@ var todosOsPedidos = [];
 var filtroAtual = 'hoje';
 
 // ── LOGIN ──
-var ADMIN_USER = 'admin';
-var ADMIN_PASS = 'frango123';
+var ADMIN_USERS = [
+  { user: 'admin', pass: 'frango123' },
+  { user: 'bruna', pass: 'ryan123'  }
+];
 
 function fazerLogin(){
   var u = (document.getElementById('login-user').value||'').trim();
   var p = (document.getElementById('login-pass').value||'').trim();
-  if(u === ADMIN_USER && p === ADMIN_PASS){
+  var ok = ADMIN_USERS.some(function(a){ return a.user === u && a.pass === p; });
+  if(ok){
     document.getElementById('login-wrap').style.display = 'none';
     document.getElementById('admin-wrap').style.display = 'block';
     setDataHoje();
