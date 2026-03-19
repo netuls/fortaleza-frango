@@ -156,7 +156,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .btn-confirmar{ background:rgba(34,197,94,0.15);color:var(--green); }
 .btn-entregar{ background:rgba(59,130,246,0.15);color:var(--blue); }
 .btn-cancelar{ background:rgba(239,68,68,0.15);color:var(--red); }
-.btn-preparo{ background:rgba(245,158,11,0.15);color:var(--yellow); }
 .btn-rota{ background:rgba(139,92,246,0.15);color:#A78BFA; }
 .btn-wpp{ background:rgba(34,197,94,0.15);color:var(--green); }
 
@@ -457,12 +456,11 @@ function buildCard(p){
     +(p.status === 'Cancelado'
       ? '<div style="padding:10px 0;text-align:center;font-size:13px;color:var(--red);font-weight:700;">PEDIDO CANCELADO</div>'
       : '<div class="status-actions">'
-        +'<button class="status-btn btn-confirmar" onclick="mudarStatus(event,this,\''+p._id+'\',\'Confirmado\',\''+p.whatsapp+'\',\''+p.nome+'\')">✅ Aceitar</button>'
-        +'<button class="status-btn btn-preparo"   onclick="mudarStatus(event,this,\''+p._id+'\',\'Em Preparo\',\''+p.whatsapp+'\',\''+p.nome+'\')">🍖 Preparo</button>'
-        +'<button class="status-btn btn-rota"      onclick="mudarStatus(event,this,\''+p._id+'\',\'Em Rota\',\''+p.whatsapp+'\',\''+p.nome+'\')">🛵 Saiu</button>'
-        +'<button class="status-btn btn-entregar"  onclick="mudarStatus(event,this,\''+p._id+'\',\'Entregue\',\''+p.whatsapp+'\',\''+p.nome+'\')">🏁 Entregue</button>'
-        +'<button class="status-btn btn-wpp"       onclick="abrirWpp(event,\''+p.whatsapp+'\',\''+p.nome+'\')">💬 WPP</button>'
-        +'<button class="status-btn btn-cancelar"  onclick="pedirConfirmacao(event,this,\''+p._id+'\',\''+p.whatsapp+'\',\''+p.nome+'\')">❌ Cancelar</button>'
+        +'<button class="status-btn btn-confirmar" onclick="mudarStatus(event,this,\''+p._id+'\',\'Confirmado\',\''+p.whatsapp+'\',\''+p.nome+'\')">Aceitar</button>'
+        +'<button class="status-btn btn-rota"      onclick="mudarStatus(event,this,\''+p._id+'\',\'Em Rota\',\''+p.whatsapp+'\',\''+p.nome+'\')">Saiu</button>'
+        +'<button class="status-btn btn-entregar"  onclick="mudarStatus(event,this,\''+p._id+'\',\'Entregue\',\''+p.whatsapp+'\',\''+p.nome+'\')">Entregue</button>'
+        +'<button class="status-btn btn-wpp"       onclick="abrirWpp(event,\''+p.whatsapp+'\',\''+p.nome+'\')">WhatsApp</button>'
+        +'<button class="status-btn btn-cancelar"  onclick="pedirConfirmacao(event,this,\''+p._id+'\',\''+p.whatsapp+'\',\''+p.nome+'\')">Cancelar</button>'
         +'</div>'
     )
     +'</div>'
@@ -489,10 +487,9 @@ function mudarStatus(e, btn, id, novoStatus, wpp, nome, isCancelamento){
 
       // Notificar cliente por WPP automaticamente
       var msgs = {
-        'Confirmado':'Olá '+nome+'! Seu pedido foi *confirmado* pelo Fortaleza Frango! 🐔',
-        'Em Preparo':'Olá '+nome+'! Seu pedido está sendo *preparado* agora! 🍖',
-        'Em Rota':'Olá '+nome+'! Seu pedido *saiu para entrega*! Aguarde em breve 🛵',
-        'Entregue':'Olá '+nome+'! Seu pedido foi *entregue*! Obrigado pela preferência! 🐔❤️'
+        'Confirmado':'Prezado(a) '+nome+', informamos que o seu pedido foi recebido e confirmado pelo Fortaleza Frango. Em breve daremos continuidade ao atendimento.',
+        'Em Rota':'Prezado(a) '+nome+', seu pedido saiu para entrega. Em breve estara em suas maos. Agradecemos a preferencia.',
+        'Entregue':'Prezado(a) '+nome+', seu pedido foi entregue com sucesso. Obrigado por escolher o Fortaleza Frango. Esperamos te atender novamente em breve.'
       };
       if(msgs[novoStatus] && wpp){
         var link = 'https://wa.me/55'+wpp+'?text='+encodeURIComponent(msgs[novoStatus]);
@@ -508,7 +505,7 @@ function mudarStatus(e, btn, id, novoStatus, wpp, nome, isCancelamento){
 // ── ABRIR WHATSAPP ──
 function abrirWpp(e, wpp, nome){
   e.stopPropagation();
-  var msg = 'Olá '+nome+'! Aqui é o Fortaleza Frango. ';
+  var msg = 'Prezado(a) '+nome+', aqui e o Fortaleza Frango. Gostaríamos de entrar em contato sobre o seu pedido.';
   window.open('https://wa.me/55'+wpp+'?text='+encodeURIComponent(msg),'_blank');
 }
 
